@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Diff main page</title>
+    </head>
+    <body>
+        <form class="" action="login" method="post">
+            <input type="text" name="username" id="username" value="">
+            <input type="password" name="password" id="password" value="">
+            <!-- <input type="hidden" name="cookie" id="input_cookie" value="" width="0"> -->
+            <!-- <button type="button" id="login">Login to NTUOJ</button> -->
+            <input type="submit" name="" value="">
+        </form>
+    </body>
+</html>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script type="text/javascript">
+
+function getRandomString(len) {
+    let lib = '1234567890qwertyuiopasdfghjklzxcvbnm'
+    let rt = ''
+    for(let i=0; i<len; ++i) rt+=lib[Math.floor(Math.random()*lib.length)]
+    return rt
+}
+
+function parseCookie() {
+    let cookie = document.cookie
+    let cookies = cookie.split(';')
+    for(let i in cookies) if(cookies[i][0] == ' ') cookie[i] = cookie[i].substr(1, cookie[i].length)
+    let ret = {}
+    for(let i in cookies) {
+        let z = cookies[i].split('=')
+        ret[z[0]] = z[1]
+    }
+    return ret
+}
+
+let cookie = parseCookie()
+if(typeof(cookie['PHPSESSID']) != 'string' || cookie['PHPSESSID'].length != 26) {
+    document.cookie = 'PHPSESSID=' + getRandomString(26)
+}
+// $('#input_cookie')[0].value = parseCookie()['PHPSESSID']
+
+$('#login').attr('onclick', 'login()')
+function login() {
+    const username = $('#username')[0].value
+    const password = $('#password')[0].value
+    const cookie = parseCookie()['PHPSESSID']
+
+    let url = '/login'
+    let xhr = new XMLHttpRequest()
+    let query = 'username=' + username + '&password=' + password + '&cookie=' + cookie
+
+    xhr.open('POST', url, true)
+
+
+    // console.log(username, password)
+    // let url = 'https://cors-anywhere.herokuapp.com/http://acm.csie.org/ntujudge/bin/login.php'
+    // let xhr = new XMLHttpRequest()
+    // let query = 'username=' + username + '&password=' + password + '&submit=LOGIN'
+    // xhr.open('POST', url, true)
+    // xhr.onreadystatechange = () => {
+    //     if(xhr.readyState == 4 && xhr.status == 200) {
+    //         console.log(xhr.responseText)
+    //     }
+    //     console.log(xhr.readyState, xhr.status, xhr)
+    //     console.log(xhr.getResponseHeader('Set-Cookie'))
+    // }
+    // xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded')
+    // // xhr.setRequestHeader('Cookie', parseCookie()['PHPSESSID'])
+    // xhr.send(query)
+}
+
+</script>
