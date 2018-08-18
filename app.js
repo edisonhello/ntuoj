@@ -22,18 +22,24 @@ homeRouter.get(['/', '/login'], async (ctx) => {
     let cookie = ctx.request.header.cookie
     cookie = parseCookie(cookie)
     await ctx.render('main')
+    // debug(ctx,ctx.body)
     // if(typeof(cookie['PHPSESSID']) != 'string' || cookie['PHPSESSID'].length != 26) {
     //     // this part does really set header, unknown reason.
     //     // but now, if cookie is empty, it will be set at front-end
     //     debug("got no cookie")
     //     ctx.response.header['set-cookie'] = getRandomString(26)
     // }
+}).get(['/stat'], async (ctx) => {
+    let cookie = ctx.request.header.cookie
+    if(typeof(cookie) !== 'string') return
+    // await ctx.render()
 }).post(['/login'], async (ctx) => {
-    // console.log(ctx.request)
     let {username, password} = ctx.request.body
     let cookie = ctx.request.header.cookie
-    let sessionid = parseCookie(cookie)['PHPSESSID']
-    debug(username, cookie, sessionid)
+    if(typeof(cookie) !== 'string') return
+    debug(username, cookie)
+    // let sessionid = parseCookie(cookie)['PHPSESSID']
+    // debug(username, cookie, sessionid)
 
     let res = await NTUOJLogin(username, password, cookie)
     if(res[0] === true) ctx.body = 'success'
